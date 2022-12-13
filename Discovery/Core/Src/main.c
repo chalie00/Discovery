@@ -96,17 +96,19 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_HOST_Init();
   MX_TIM4_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //매크로 언더바 2개로 시작
+	  //매크�? ?��?���? 2개로 ?��?��
 	  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, ccr);
-	  //TIM4 -> CCR4 = ccr; //위의 매크로 대신 이렇게 사용해도 됨
+	  //TIM4 -> CCR4 = ccr; //?��?�� 매크�? ???�� ?��?���? ?��?��?��?�� ?��
 	  ccr += 1000;
 	  if(ccr > TIM4->ARR) ccr = 0;
 	  HAL_Delay(50);
@@ -170,6 +172,13 @@ void SystemClock_Config(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	if(GPIO_Pin == GPIO_PIN_0) {
 		Blue_LED_Toggle;
+	}
+}
+
+//Timer Callback
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim -> Instance == TIM2) {
+		Green_LED_Toggle;
 	}
 }
 
