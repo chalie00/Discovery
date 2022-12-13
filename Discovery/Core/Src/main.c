@@ -21,6 +21,7 @@
 #include "i2c.h"
 #include "i2s.h"
 #include "spi.h"
+#include "tim.h"
 #include "usb_host.h"
 #include "gpio.h"
 
@@ -46,7 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint16_t ccr = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,22 +95,21 @@ int main(void)
   MX_I2S3_Init();
   MX_SPI1_Init();
   MX_USB_HOST_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  Orange_LED_Toggle;
-//	  HAL_Delay(1000);
-//	  Green_LED_Toggle;
-//	  HAL_Delay(1000);
-//	  Red_LED_Toggle;
-//	  HAL_Delay(1000);
-//	  Blue_LED_Toggle;
-//	  HAL_Delay(1000);
+	  //매크로 언더바 2개로 시작
+	  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, ccr);
+	  //TIM4 -> CCR4 = ccr; //위의 매크로 대신 이렇게 사용해도 됨
+	  ccr += 1000;
+	  if(ccr > TIM4->ARR) ccr = 0;
+	  HAL_Delay(50);
 
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
