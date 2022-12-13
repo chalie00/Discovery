@@ -102,14 +102,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  Orange_LED_Toggle;
-	  HAL_Delay(1000);
-	  Green_LED_Toggle;
-	  HAL_Delay(1000);
-	  Red_LED_Toggle;
-	  HAL_Delay(1000);
-	  Blue_LED_Toggle;
-	  HAL_Delay(1000);
+//	  Orange_LED_Toggle;
+//	  HAL_Delay(1000);
+//	  Green_LED_Toggle;
+//	  HAL_Delay(1000);
+//	  Red_LED_Toggle;
+//	  HAL_Delay(1000);
+//	  Blue_LED_Toggle;
+//	  HAL_Delay(1000);
 
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
@@ -165,6 +165,13 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+//Interrupt Switch
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	if(GPIO_Pin == GPIO_PIN_0) {
+		Blue_LED_Toggle;
+	}
+}
 
 /* USER CODE END 4 */
 
