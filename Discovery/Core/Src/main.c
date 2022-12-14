@@ -19,9 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
-#include "i2s.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "usb_host.h"
 #include "gpio.h"
 
@@ -47,7 +47,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+//CCR for PWM Testing
 uint16_t ccr = 0;
+
+//v for Polling UART Testing
+uint8_t a = 'a';
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,11 +97,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
-  MX_I2S3_Init();
   MX_SPI1_Init();
   MX_USB_HOST_Init();
   MX_TIM4_Init();
   MX_TIM2_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   HAL_TIM_Base_Start_IT(&htim2);
@@ -106,12 +111,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //매크�? ?��?���? 2개로 ?��?��
+	  //매크�?? ?��?���?? 2개로 ?��?��
 	  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, ccr);
-	  //TIM4 -> CCR4 = ccr; //?��?�� 매크�? ???�� ?��?���? ?��?��?��?�� ?��
+	  //TIM4 -> CCR4 = ccr; //?��?�� 매크�?? ???�� ?��?���?? ?��?��?��?�� ?��
 	  ccr += 1000;
 	  if(ccr > TIM4->ARR) ccr = 0;
 	  HAL_Delay(50);
+
+	  //UART Polling
+	  //HAL_OK는 수신이 완료되었느냐를 판단 수신이 &a에 완료되면 if로 이동
+	  if(HAL_UART_Receive(&huart4, &a, 1, 10) == HAL_OK) {
+		  //받은 &a Data를 전송
+		  HAL_UART_Transmit(&huart4, &a, 1, 10);
+	  }
 
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
