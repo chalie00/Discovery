@@ -929,11 +929,11 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
  80008a8:	40020400 	.word	0x40020400
 
 080008ac <_write>:
-void SystemClock_Config(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
 // function for printf
+//아래 int 이후 한칸 띄어서 시작해야함
 int _write(int file, char *p, int len) {
  80008ac:	b580      	push	{r7, lr}
  80008ae:	b084      	sub	sp, #16
@@ -942,7 +942,7 @@ int _write(int file, char *p, int len) {
  80008b4:	60b9      	str	r1, [r7, #8]
  80008b6:	607a      	str	r2, [r7, #4]
 	//Parameter: output uart, output char, output length, timeout
-	HAL_UART_Transmit(&huart4, p, len, 10);
+	HAL_UART_Transmit(&huart4, (uint8_t*)p, len, 10);
  80008b8:	687b      	ldr	r3, [r7, #4]
  80008ba:	b29a      	uxth	r2, r3
  80008bc:	230a      	movs	r3, #10

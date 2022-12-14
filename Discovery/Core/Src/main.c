@@ -66,9 +66,11 @@ void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
 // function for printf
+//아래 int 이후 한칸 띄어서 시작해야함
 int _write(int file, char *p, int len) {
 	//Parameter: output uart, output char, output length, timeout
-	HAL_UART_Transmit(&huart4, p, len, 10);
+	//(uint8_t*)p로 캐스트해야 부호 관련 경고가 사라짐
+	HAL_UART_Transmit(&huart4, (uint8_t*)p, len, 10);
 	return len;
 }
 
